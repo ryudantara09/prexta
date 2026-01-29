@@ -110,13 +110,21 @@ const calendarOptions = computed(() => ({
     height: 'auto',
 }));
 
-const handleRescheduleConfirm = () => {
+const handleRescheduleConfirm = (timePayload?: string) => {
     if (!pendingDropInfo.value) return;
     
     const info = pendingDropInfo.value;
+    // Use the timePayload from the dialog if provided, otherwise fallback to drop info
+    // However, eventDrop provides info.event.startStr which is what the dialog initialized the input with.
+    // If user edited it, timePayload will be the new ISO string (local time usually from input type=datetime-local).
     
+    let scheduledAt = timePayload;
+    if (!scheduledAt) {
+         scheduledAt = info.event.startStr;
+    }
+
     router.post(`/dashboard/interviews/${info.event.id}/move`, {
-        scheduled_at: info.event.startStr // Use ISO string
+        scheduled_at: scheduledAt
     }, {
         preserveScroll: true,
         onSuccess: () => {

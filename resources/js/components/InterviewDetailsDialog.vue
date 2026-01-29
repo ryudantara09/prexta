@@ -116,65 +116,72 @@ const handleUpdate = () => {
                 </DialogDescription>
             </DialogHeader>
 
-            <div class="grid gap-4 py-4" v-if="event">
+            <div class="grid gap-6 py-4" v-if="event">
                 
-                <!-- Title Field -->
-                <div class="grid gap-2">
-                    <Label for="title">Title</Label>
-                    <Input
-                        v-if="!event.extendedProps?.is_application"
-                        id="title"
-                        v-model="form.title"
-                    />
-                    <div v-else class="rounded-md border bg-muted px-3 py-2 text-sm text-muted-foreground">
-                        {{ event.title }}
+                 <!-- Header Section -->
+                <div class="flex items-center gap-4 rounded-lg bg-muted/50 p-4">
+                     <div class="h-12 w-12 flex-shrink-0 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-lg uppercase">
+                        {{ (event.extendedProps?.applicant || event.title || '?').charAt(0) }}
+                    </div>
+                    <div>
+                         <h3 class="font-semibold text-lg text-foreground">
+                            {{ event.extendedProps?.is_application ? event.extendedProps?.applicant : form.title }}
+                        </h3>
+                        <p class="text-sm text-muted-foreground">
+                             {{ event.extendedProps?.job || 'General Meeting' }}
+                        </p>
                     </div>
                 </div>
 
-                <!-- Applicant/Guest Field -->
-                <div class="grid gap-2">
-                    <Label for="person">{{ event.extendedProps?.is_application ? 'Applicant' : 'Guest Name' }}</Label>
-                    <Input
-                        v-if="!event.extendedProps?.is_application"
-                        id="person"
-                        v-model="form.guest_name"
-                    />
-                     <div v-else class="rounded-md border bg-muted px-3 py-2 text-sm text-muted-foreground">
-                        {{ event.extendedProps?.applicant }}
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <!-- Title Field (Editable for General) -->
+                    <div class="grid gap-2" v-if="!event.extendedProps?.is_application">
+                        <Label for="title">Meeting Title</Label>
+                        <Input
+                            id="title"
+                            v-model="form.title"
+                            placeholder="e.g. Sync Up"
+                        />
+                    </div>
+                     <!-- Hidden if Application to avoid redundancy since displayed in header, 
+                          but needed if we want to edit Guest Name for non-application -->
+                     <div class="grid gap-2" v-if="!event.extendedProps?.is_application">
+                        <Label for="person">Guest Name</Label>
+                         <Input
+                            id="person"
+                            v-model="form.guest_name"
+                            placeholder="John Doe"
+                        />
                     </div>
                 </div>
                  
-                 <!-- Job Field (Always Read-only) -->
-                 <div class="grid gap-2">
-                    <Label>Job</Label>
-                    <div class="rounded-md border bg-muted px-3 py-2 text-sm text-muted-foreground">
-                        {{ event.extendedProps?.job || 'N/A' }}
+                 <!-- Time & Status Row -->
+                 <div class="grid gap-4 sm:grid-cols-2">
+                     <!-- Time Field -->
+                    <div class="grid gap-2">
+                        <Label for="scheduled_at">Date & Time</Label>
+                        <Input
+                            id="scheduled_at"
+                            type="datetime-local"
+                            v-model="form.scheduled_at"
+                            class="block w-full"
+                        />
                     </div>
-                </div>
 
-                <!-- Time Field -->
-                 <div class="grid gap-2">
-                    <Label for="scheduled_at">Date & Time</Label>
-                    <Input
-                        id="scheduled_at"
-                        type="datetime-local"
-                        v-model="form.scheduled_at"
-                    />
-                </div>
-
-                <!-- Status Field -->
-                 <div class="grid gap-2">
-                    <Label for="status">Status</Label>
-                    <select
-                        id="status"
-                        v-model="form.status"
-                         class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none dark:bg-gray-800"
-                    >
-                        <option value="pending">Pending</option>
-                        <option value="scheduled">Scheduled</option>
-                        <option value="completed">Completed</option>
-                        <option value="cancelled">Cancelled</option>
-                    </select>
+                    <!-- Status Field -->
+                    <div class="grid gap-2">
+                        <Label for="status">Status</Label>
+                        <select
+                            id="status"
+                            v-model="form.status"
+                             class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none dark:bg-gray-800"
+                        >
+                            <option value="pending">Pending</option>
+                            <option value="scheduled">Scheduled</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
                 </div>
 
             </div>
