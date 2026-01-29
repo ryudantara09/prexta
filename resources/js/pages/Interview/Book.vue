@@ -9,14 +9,16 @@ import {
 } from '@/components/ui/card';
 import { Head, useForm } from '@inertiajs/vue3';
 import { Calendar } from 'lucide-vue-next';
+import { update } from '@/routes/interview';
 
 const props = defineProps<{
     interview: {
         token: string;
-        application: {
+        application?: {
             applicant: { full_name: string };
             job_position: { title: string; city: string; country: string };
         };
+        meeting_title?: string;
     };
     slots: Record<
         string,
@@ -26,10 +28,12 @@ const props = defineProps<{
 
 const form = useForm({
     scheduled_at: '',
+    guest_name: '',
+    guest_email: '',
 });
 
 const submit = () => {
-    form.post(route('interview.update', props.interview.token), {
+    form.post(update.url(props.interview.token), {
         preserveScroll: true,
     });
 };
@@ -54,14 +58,82 @@ const formatDate = (dateString: string) => {
                 <h2
                     class="mt-6 text-3xl font-extrabold text-gray-900 dark:text-white"
                 >
-                    Schedule Your Interview
+                    {{
+                        interview.application
+                            ? 'Schedule Your Interview'
+                            : 'Book a Meeting'
+                    }}
                 </h2>
-                <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                    Hi {{ interview.application.applicant.full_name }}, please
-                    select a time for your interview for the
-                    {{ interview.application.job_position.title }} position.
-                </p>
+                <div
+                    v-if="interview.application"
+                    class="mt-2 text-sm text-gray-600 dark:text-gray-400"
+                >
+                    <p>
+                        Hi {{ interview.application.applicant.full_name }},
+                        please select a time for your interview for the
+                        {{ interview.application.job_position.title }} position.
+                    </p>
+                </div>
+                <div
+                    v-else
+                    class="mt-2 text-sm text-gray-600 dark:text-gray-400"
+                >
+                    <p>
+                        Please select a time for your:
+                        <strong>{{
+                            interview.meeting_title || 'Meeting'
+                        }}</strong>
+                    </p>
+                </div>
             </div>
+
+            <Card v-if="!interview.application" class="mb-8">
+                <CardHeader>
+                    <CardTitle>Your Information</CardTitle>
+                    <CardDescription
+                        >Tell us who you are so we can confirm the
+                        meeting.</CardDescription
+                    >
+                </CardHeader>
+                <CardContent class="grid gap-4">
+                    <div class="grid gap-2">
+                        <label for="name" class="text-sm font-medium"
+                            >Full Name</label
+                        >
+                        <input
+                            id="name"
+                            type="text"
+                            v-model="form.guest_name"
+                            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none dark:bg-gray-800"
+                            placeholder="John Doe"
+                        />
+                        <p
+                            v-if="form.errors.guest_name"
+                            class="text-xs text-red-500"
+                        >
+                            {{ form.errors.guest_name }}
+                        </p>
+                    </div>
+                    <div class="grid gap-2">
+                        <label for="email" class="text-sm font-medium"
+                            >Email Address</label
+                        >
+                        <input
+                            id="email"
+                            type="email"
+                            v-model="form.guest_email"
+                            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none dark:bg-gray-800"
+                            placeholder="john@example.com"
+                        />
+                        <p
+                            v-if="form.errors.guest_email"
+                            class="text-xs text-red-500"
+                        >
+                            {{ form.errors.guest_email }}
+                        </p>
+                    </div>
+                </CardContent>
+            </Card>
 
             <Card>
                 <CardHeader>

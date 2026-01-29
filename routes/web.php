@@ -27,6 +27,14 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () 
         Route::get('applications', [App\Http\Controllers\ApplicationController::class, 'index'])->name('applications.index');
         Route::patch('applications/{application}/note', [App\Http\Controllers\ApplicationController::class, 'updateNote'])->name('applications.updateNote');
         Route::post('applications/{application}/interview', [App\Http\Controllers\InterviewController::class, 'store'])->name('applications.interview.store');
+        Route::post('applications/interview/general', [App\Http\Controllers\InterviewController::class, 'storeGeneral'])->name('interviews.storeGeneral');
+        Route::post('applications/{application}/interview/manual', [App\Http\Controllers\InterviewController::class, 'manualSchedule'])->name('applications.interview.manual');
+        
+        Route::get('interviews', [App\Http\Controllers\InterviewController::class, 'index'])->name('interviews.index');
+        Route::get('interviews/pending', [App\Http\Controllers\InterviewController::class, 'pending'])->name('interviews.pending');
+        Route::post('interviews/{interview}/cancel', [App\Http\Controllers\InterviewController::class, 'cancel'])->name('interviews.cancel');
+        Route::post('interviews/{interview}/move', [App\Http\Controllers\InterviewController::class, 'move'])->name('interviews.move');
+        Route::patch('interviews/{interview}', [App\Http\Controllers\InterviewController::class, 'updateDashboard'])->name('interviews.update');
     });
 });
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Algorithm;
 use App\Models\Application;
 use App\Models\Interview;
+use App\Models\JobPosition;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -13,8 +14,133 @@ use Inertia\Inertia;
 class InterviewController extends Controller
 {
     /**
-     * Generate an interview link for an application.
+     * Display a listing of upcoming interviews.
      */
+    public function index()
+    {
+        $interviews = Interview::with(['application.applicant', 'application.jobPosition'])
+            ->whereNotNull('scheduled_at')
+            ->where('status', 'scheduled')
+            ->orderBy('scheduled_at')
+            ->get()
+            ->map(function ($interview) {
+                if ($interview->application) {
+                    $title = 'Interview with ' . $interview->application->applicant->full_name;
+                    $applicantName = $interview->application->applicant->full_name;
+                    $job = $interview->application->jobPosition->title;
+                } else {
+                    $title = $interview->meeting_title ?? 'Meeting with ' . ($interview->guest_name ?? 'Guest');
+                    $applicantName = $interview->guest_name ?? 'Guest';
+                    $job = 'General Meeting';
+                }
+
+                return [
+                    'id' => $interview->id,
+                    'title' => $title,
+                    'start' => $interview->scheduled_at->format('Y-m-d H:i:00'),
+                    'end' => $interview->scheduled_at->addHour()->format('Y-m-d H:i:00'),
+                    'extendedProps' => [
+                        'applicant' => $applicantName,
+                        'job' => $job,
+                        'status' => $interview->status,
+                        'is_application' => $interview->application_id !== null,
+                        'guest_name' => $interview->guest_name,
+                        'meeting_title' => $interview->meeting_title,
+                    ]
+                ];
+            });
+
+        return Inertia::render('Dashboard/Interviews/Index', [
+            'events' => $interviews,
+            'applications' => Application::with('applicant')
+                ->whereDoesntHave('interview', function ($query) {
+                    $query->where('status', 'scheduled');
+                })
+                ->get()
+                ->map(function ($app) {
+                    return [
+                        'id' => $app->id,
+                        'name' => $app->applicant->full_name,
+                    ];
+                }),
+            'job_positions' => JobPosition::select('id', 'title')->get()
+        ]);
+    }
+
+    public function pending()
+    {
+        $pendingInterviews = Interview::with(['application.applicant'])
+            ->where('status', 'pending')
+            ->where('created_at', '>=', Carbon::now()->subHours(24))
+            ->latest()
+            ->get()
+            ->map(function ($interview) {
+                return [
+                    'id' => $interview->id,
+                    'token' => $interview->token,
+                    'created_at' => $interview->created_at->format('Y-m-d H:i'),
+                    'ttl' => $interview->created_at->addHours(24)->diffForHumans(null, true, false, 2),
+                    'url' => route('interview.book', $interview->token),
+                    'person' => $interview->application ? $interview->application->applicant->full_name : ($interview->guest_name ?? 'Guest/General'),
+                ];
+            });
+
+        return Inertia::render('Dashboard/Interviews/Pending', [
+            'pendingInterviews' => $pendingInterviews,
+        ]);
+    }
+
+    public function cancel(Interview $interview)
+    {
+        $interview->update([
+            'status' => 'cancelled',
+            'scheduled_at' => null,
+        ]);
+
+        return back()->with('flash', [
+            'type' => 'success',
+            'message' => 'Interview cancelled successfully.',
+        ]);
+    }
+
+    public function move(Request $request, Interview $interview)
+    {
+        $request->validate([
+            'scheduled_at' => 'required|date|after:now',
+        ]);
+
+        $interview->update([
+            'scheduled_at' => $request->scheduled_at,
+        ]);
+
+        return back()->with('flash', [
+            'type' => 'success',
+            'message' => 'Interview rescheduled successfully.',
+        ]);
+    }
+
+    public function updateDashboard(Request $request, Interview $interview)
+    {
+        $validated = $request->validate([
+            'scheduled_at' => 'required|date', // Allow past dates for record keeping if admin wants
+            'status' => 'required|in:pending,scheduled,cancelled,completed',
+            'meeting_title' => 'nullable|string|max:255',
+            'guest_name' => 'nullable|string|max:255',
+        ]);
+
+        $interview->update([
+            'scheduled_at' => $validated['scheduled_at'],
+            'status' => $validated['status'],
+            'meeting_title' => $validated['meeting_title'] ?? $interview->meeting_title,
+            'guest_name' => $validated['guest_name'] ?? $interview->guest_name,
+        ]);
+
+        return back()->with('flash', [
+            'type' => 'success',
+            'message' => 'Interview updated successfully.',
+        ]);
+    }
+
     public function store(Application $application)
     {
         // Check if interview already exists
@@ -27,8 +153,6 @@ class InterviewController extends Controller
             ]);
         }
 
-        // Return the booking URL to the recruiter
-        // In a real app we might email this, but requirement is "link that is sent (manually)"
         return back()->with('flash', [
             'type' => 'success',
             'message' => 'Interview link generated!',
@@ -39,8 +163,51 @@ class InterviewController extends Controller
     }
 
     /**
-     * Show the booking page to the candidate.
+     * Generate a general meeting link.
      */
+    public function storeGeneral(Request $request)
+    {
+        $interview = Interview::create([
+            'token' => Str::upper(Str::random(10)),
+            'status' => 'pending',
+            'meeting_title' => $request->meeting_title ?? 'Meeting',
+        ]);
+
+        \Illuminate\Support\Facades\Log::info('Meeting link generated', ['url' => route('interview.book', $interview->token)]);
+
+        return back()->with('flash', [
+            'type' => 'success',
+            'message' => 'Meeting link generated!',
+            'data' => [
+                'interview_url' => route('interview.book', $interview->token)
+            ]
+        ]);
+    }
+
+    /**
+     * Manually schedule an interview for an application.
+     */
+    public function manualSchedule(Request $request, Application $application)
+    {
+        $request->validate([
+            'scheduled_at' => 'required|date|after:now',
+        ]);
+
+        $interview = $application->interview()->updateOrCreate(
+            ['application_id' => $application->id],
+            [
+                'token' => Str::upper(Str::random(10)),
+                'scheduled_at' => $request->scheduled_at,
+                'status' => 'scheduled',
+            ]
+        );
+
+        return back()->with('flash', [
+            'type' => 'success',
+            'message' => 'Interview scheduled successfully!',
+        ]);
+    }
+
     public function show($token)
     {
         $interview = Interview::where('token', $token)->firstOrFail();
@@ -49,16 +216,16 @@ class InterviewController extends Controller
             abort(404, 'Interview cancelled');
         }
 
+        if ($interview->created_at->addHours(24)->isPast()) {
+            abort(404, 'Link expired');
+        }
+
         if ($interview->status === 'scheduled') {
              return Inertia::render('Interview/Confirmed', [
                 'interview' => $interview->load('application.jobPosition', 'application.applicant'),
             ]);
         }
 
-        // Generate availability slots
-        // Simple logic: Next 5 week days, 9am - 4pm, 1 hour slots
-        // Excluding existing appointments
-        
         $slots = $this->generateAvailabilitySlots();
 
         return Inertia::render('Interview/Book', [
@@ -67,18 +234,22 @@ class InterviewController extends Controller
         ]);
     }
 
-    /**
-     * Book the interview slot.
-     */
     public function update(Request $request, $token)
     {
         $interview = Interview::where('token', $token)->firstOrFail();
 
-        $request->validate([
+        $rules = [
             'scheduled_at' => 'required|date|after:now',
-        ]);
+        ];
 
-        // Verify slot is still available (basic check)
+        if (!$interview->application_id) {
+            $rules['guest_name'] = 'required|string|max:255';
+            $rules['guest_email'] = 'required|email|max:255';
+        }
+
+        $request->validate($rules);
+
+        // Verify slot is still available
         $exists = Interview::where('scheduled_at', $request->scheduled_at)
             ->where('id', '!=', $interview->id)
             ->exists();
@@ -90,9 +261,11 @@ class InterviewController extends Controller
         $interview->update([
             'scheduled_at' => $request->scheduled_at,
             'status' => 'scheduled',
+            'guest_name' => $request->guest_name ?? $interview->guest_name,
+            'guest_email' => $request->guest_email ?? $interview->guest_email,
         ]);
 
-        return redirect()->route('interview.book', $token)->with('success', 'Interview scheduled successfully!');
+        return redirect()->route('interview.book', $token)->with('success', 'Meeting scheduled successfully!');
     }
 
     private function generateAvailabilitySlots()

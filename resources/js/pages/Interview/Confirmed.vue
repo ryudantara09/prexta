@@ -6,10 +6,12 @@ import { Calendar, CheckCircle, MapPin } from 'lucide-vue-next';
 const props = defineProps<{
     interview: {
         scheduled_at: string;
-        application: {
+        application?: {
             applicant: { full_name: string };
             job_position: { title: string; city: string; country: string };
         };
+        meeting_title?: string;
+        guest_name?: string;
     };
 }>();
 
@@ -71,7 +73,7 @@ const formatDateTime = (dateString: string) => {
 
                     <div class="flex items-start">
                         <MapPin class="mt-0.5 mr-3 h-5 w-5 text-gray-400" />
-                        <div>
+                        <div v-if="interview.application">
                             <p
                                 class="text-sm font-medium text-gray-900 dark:text-gray-100"
                             >
@@ -83,6 +85,18 @@ const formatDateTime = (dateString: string) => {
                             <p class="text-xs text-gray-400">
                                 {{ interview.application.job_position.city }},
                                 {{ interview.application.job_position.country }}
+                            </p>
+                        </div>
+                        <div v-else>
+                            <p
+                                class="text-sm font-medium text-gray-900 dark:text-gray-100"
+                            >
+                                Meeting
+                            </p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">
+                                {{
+                                    interview.meeting_title || 'General Meeting'
+                                }}
                             </p>
                         </div>
                     </div>

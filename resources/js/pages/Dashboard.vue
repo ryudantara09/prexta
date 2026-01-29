@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import SchedulingDialog from '@/components/SchedulingDialog.vue';
+import { Button } from '@/components/ui/button';
 import {
     Card,
     CardContent,
@@ -9,8 +11,10 @@ import {
 import AppLayout from '@/layouts/AppLayout.vue';
 import { dashboard } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import { Briefcase, Calendar, Clock, TrendingUp, Users } from 'lucide-vue-next';
+import { toast } from 'vue-sonner';
+import { ref } from 'vue';
 
 interface Stats {
     total_jobs: number;
@@ -25,7 +29,60 @@ interface Stats {
 
 defineProps<{
     stats: Stats;
+    recent_applications: Array<{
+        id: number;
+        applicant: { full_name: string; email: string };
+        job_position: { title: string };
+        created_at: string;
+        interview: {
+            id: number;
+            token: string;
+            status: string;
+            scheduled_at: string | null;
+        } | null;
+    }>;
 }>();
+
+const schedulingDialogOpen = ref(false);
+const schedulingApplicationId = ref<number | null>(null);
+const schedulingApplicantName = ref('');
+
+const openSchedulingDialog = (app: any) => {
+    schedulingApplicationId.value = app.id;
+    schedulingApplicantName.value = app.applicant.full_name;
+    schedulingDialogOpen.value = true;
+};
+
+const generateInterviewLink = (applicationId: number) => {
+    router.post(
+        `/dashboard/applications/${applicationId}/interview`,
+        {},
+        {
+            preserveScroll: true,
+            onSuccess: (page) => {
+                const flash = page.props.flash as any;
+                if (flash && flash.data && flash.data.interview_url) {
+                    navigator.clipboard.writeText(flash.data.interview_url);
+                    toast.success(flash.message, {
+                        description: flash.data.interview_url,
+                        duration: 8000,
+                    });
+                } else {
+                    console.error('Flash data missing or incorrect:', flash);
+                    toast.error(
+                        'Process completed, but could not find the link.',
+                    );
+                }
+            },
+        },
+    );
+};
+
+const copyInterviewLink = (token: string) => {
+    const url = `${window.location.origin}/interview/${token}`;
+    navigator.clipboard.writeText(url);
+    toast.success('Interview link copied to clipboard!');
+};
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -121,51 +178,79 @@ const breadcrumbs: BreadcrumbItem[] = [
                 <!-- Recent Activity / Applicants Stats Breakdown -->
                 <Card class="col-span-4">
                     <CardHeader>
-                        <CardTitle>Application Velocity</CardTitle>
+                        <CardTitle>Recent Applications</CardTitle>
                         <CardDescription>
-                            Overview of applicant intake over different periods.
+                            Latest candidates who applied.
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <div class="space-y-8">
-                            <div class="flex items-center">
-                                <div class="ml-4 space-y-1">
+                        <div class="space-y-4">
+                            <div
+                                v-for="app in recent_applications"
+                                :key="app.id"
+                                class="flex items-center justify-between border-b pb-4 last:border-0 last:pb-0"
+                            >
+                                <div>
                                     <p class="text-sm leading-none font-medium">
-                                        Weekly
+                                        {{ app.applicant.full_name }}
                                     </p>
                                     <p class="text-sm text-muted-foreground">
-                                        Last 7 days
+                                        {{ app.job_position.title }}
                                     </p>
                                 </div>
-                                <div class="ml-auto font-medium">
-                                    {{ stats.applicants.weekly }} Applicants
+                                <div class="flex items-center gap-2">
+                                    <div
+                                        v-if="app.interview"
+                                        class="flex flex-col items-end gap-1"
+                                    >
+                                        <span
+                                            class="text-[10px] font-bold uppercase"
+                                            :class="{
+                                                'text-yellow-600':
+                                                    app.interview.status ===
+                                                    'pending',
+                                                'text-green-600':
+                                                    app.interview.status ===
+                                                    'scheduled',
+                                                'text-red-600':
+                                                    app.interview.status ===
+                                                    'cancelled',
+                                                'text-blue-600':
+                                                    app.interview.status ===
+                                                    'completed',
+                                            }"
+                                        >
+                                            {{ app.interview.status }}
+                                        </span>
+                                        <Button
+                                            size="sm"
+                                            variant="outline"
+                                            class="h-6 px-2 text-[10px]"
+                                            @click="
+                                                copyInterviewLink(
+                                                    app.interview.token,
+                                                )
+                                            "
+                                        >
+                                            Copy Link
+                                        </Button>
+                                    </div>
+                                    <Button
+                                        v-else
+                                        size="sm"
+                                        variant="secondary"
+                                        class="h-7 px-2 text-xs"
+                                        @click="openSchedulingDialog(app)"
+                                    >
+                                        Schedule
+                                    </Button>
                                 </div>
                             </div>
-                            <div class="flex items-center">
-                                <div class="ml-4 space-y-1">
-                                    <p class="text-sm leading-none font-medium">
-                                        Biweekly
-                                    </p>
-                                    <p class="text-sm text-muted-foreground">
-                                        Last 14 days
-                                    </p>
-                                </div>
-                                <div class="ml-auto font-medium">
-                                    {{ stats.applicants.biweekly }} Applicants
-                                </div>
-                            </div>
-                            <div class="flex items-center">
-                                <div class="ml-4 space-y-1">
-                                    <p class="text-sm leading-none font-medium">
-                                        Monthly
-                                    </p>
-                                    <p class="text-sm text-muted-foreground">
-                                        Last 30 days
-                                    </p>
-                                </div>
-                                <div class="ml-auto font-medium">
-                                    {{ stats.applicants.monthly }} Applicants
-                                </div>
+                            <div
+                                v-if="recent_applications.length === 0"
+                                class="py-4 text-center text-sm text-muted-foreground"
+                            >
+                                No recent applications.
                             </div>
                         </div>
                     </CardContent>
@@ -212,5 +297,12 @@ const breadcrumbs: BreadcrumbItem[] = [
                 </Card>
             </div>
         </div>
+
+        <SchedulingDialog
+            v-model:is-open="schedulingDialogOpen"
+            :application-id="schedulingApplicationId"
+            :applicant-name="schedulingApplicantName"
+            @link-generated="generateInterviewLink"
+        />
     </AppLayout>
 </template>

@@ -23,6 +23,11 @@ export type AppPageProps<
     name: string;
     quote: { message: string; author: string };
     auth: Auth;
+    flash: {
+        type: string;
+        message: string;
+        data?: any;
+    } | null;
     sidebarOpen: boolean;
 };
 

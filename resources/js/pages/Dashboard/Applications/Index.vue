@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import SchedulingDialog from '@/components/SchedulingDialog.vue';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { updateNote } from '@/routes/dashboard/applications';
 import { BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/vue3';
+import { toast } from 'vue-sonner';
 import { ref, watch } from 'vue';
 
 interface Application {
@@ -60,6 +62,10 @@ const selectedApplicant = ref<string | undefined>(
 const editingNoteId = ref<number | null>(null);
 const noteForm = ref<{ [key: number]: string }>({});
 
+const schedulingDialogOpen = ref(false);
+const schedulingApplicationId = ref<number | null>(null);
+const schedulingApplicantName = ref('');
+
 // Initialize note forms
 props.applications.forEach((app) => {
     noteForm.value[app.id] = app.recruiter_note || '';
@@ -107,6 +113,12 @@ const downloadCV = (cvPath: string) => {
     window.open(`/storage/${cvPath}`, '_blank');
 };
 
+const openSchedulingDialog = (application: Application) => {
+    schedulingApplicationId.value = application.id;
+    schedulingApplicantName.value = application.applicant.full_name;
+    schedulingDialogOpen.value = true;
+};
+
 const generateInterviewLink = (applicationId: number) => {
     // using manual route string since wayfinder might not have generated it yet or I want to be safe
     router.post(
@@ -118,13 +130,24 @@ const generateInterviewLink = (applicationId: number) => {
                 const flash = page.props.flash as any;
                 if (flash && flash.data && flash.data.interview_url) {
                     navigator.clipboard.writeText(flash.data.interview_url);
-                    alert(
-                        `Interview Link Generated and Copied to Clipboard:\n\n${flash.data.interview_url}`,
+                    toast.success(flash.message, {
+                        description: flash.data.interview_url,
+                        duration: 8000,
+                    });
+                } else {
+                    console.error('Flash data missing or incorrect:', flash);
+                    toast.error(
+                        'Process completed, but could not find the link.',
                     );
                 }
             },
         },
     );
+};
+const copyInterviewLink = (token: string) => {
+    const url = `${window.location.origin}/interview/${token}`;
+    navigator.clipboard.writeText(url);
+    toast.success('Interview link copied to clipboard!');
 };
 </script>
 
@@ -311,35 +334,80 @@ const generateInterviewLink = (applicationId: number) => {
                                         </Button>
                                     </div>
                                     <div class="flex justify-end">
-                                        <div v-if="application.interview" class="flex flex-col items-end gap-1">
-                                            <span class="text-xs font-medium uppercase" :class="{
-                                                'text-yellow-600': application.interview.status === 'pending',
-                                                'text-green-600': application.interview.status === 'scheduled',
-                                                'text-red-600': application.interview.status === 'cancelled',
-                                                'text-blue-600': application.interview.status === 'completed'
-                                            }">
-                                                {{ application.interview.status }}
+                                        <div
+                                            v-if="application.interview"
+                                            class="flex flex-col items-end gap-1"
+                                        >
+                                            <span
+                                                class="text-xs font-medium uppercase"
+                                                :class="{
+                                                    'text-yellow-600':
+                                                        application.interview
+                                                            .status ===
+                                                        'pending',
+                                                    'text-green-600':
+                                                        application.interview
+                                                            .status ===
+                                                        'scheduled',
+                                                    'text-red-600':
+                                                        application.interview
+                                                            .status ===
+                                                        'cancelled',
+                                                    'text-blue-600':
+                                                        application.interview
+                                                            .status ===
+                                                        'completed',
+                                                }"
+                                            >
+                                                {{
+                                                    application.interview.status
+                                                }}
                                             </span>
-                                            <span v-if="application.interview.scheduled_at" class="text-xs text-gray-500">
-                                                {{ new Date(application.interview.scheduled_at).toLocaleDateString() }} {{ new Date(application.interview.scheduled_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) }}
+                                            <span
+                                                v-if="
+                                                    application.interview
+                                                        .scheduled_at
+                                                "
+                                                class="text-xs text-gray-500"
+                                            >
+                                                {{
+                                                    new Date(
+                                                        application.interview
+                                                            .scheduled_at,
+                                                    ).toLocaleDateString()
+                                                }}
+                                                {{
+                                                    new Date(
+                                                        application.interview
+                                                            .scheduled_at,
+                                                    ).toLocaleTimeString([], {
+                                                        hour: '2-digit',
+                                                        minute: '2-digit',
+                                                    })
+                                                }}
                                             </span>
-                                            <Button 
-                                                size="sm" 
+                                            <Button
+                                                size="sm"
                                                 variant="outline"
                                                 class="h-7 px-2 text-xs"
-                                                @click="copyInterviewLink(application.interview.token)"
+                                                @click="
+                                                    copyInterviewLink(
+                                                        application.interview
+                                                            .token,
+                                                    )
+                                                "
                                             >
                                                 Copy Link
                                             </Button>
                                         </div>
                                         <Button
                                             v-else
-                                            size="sm" 
+                                            size="sm"
                                             variant="secondary"
                                             class="h-7 px-2 text-xs"
                                             @click="
-                                                generateInterviewLink(
-                                                    application.id,
+                                                openSchedulingDialog(
+                                                    application,
                                                 )
                                             "
                                         >
@@ -361,5 +429,12 @@ const generateInterviewLink = (applicationId: number) => {
                 </table>
             </div>
         </div>
+
+        <SchedulingDialog
+            v-model:is-open="schedulingDialogOpen"
+            :application-id="schedulingApplicationId"
+            :applicant-name="schedulingApplicantName"
+            @link-generated="generateInterviewLink"
+        />
     </AppLayout>
 </template>

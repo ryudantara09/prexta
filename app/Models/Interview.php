@@ -9,6 +9,9 @@ class Interview extends Model
 {
     protected $fillable = [
         'application_id',
+        'guest_name',
+        'guest_email',
+        'meeting_title',
         'token',
         'scheduled_at',
         'status',

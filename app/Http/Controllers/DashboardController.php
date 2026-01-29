@@ -20,8 +20,14 @@ class DashboardController extends Controller
                     'monthly' => Application::where('created_at', '>=', now()->subMonth())->count(),
                     'total' => Application::count(),
                 ],
-                'upcoming_appointments' => 0, // Feature to be added later
+                'upcoming_appointments' => \App\Models\Interview::where('status', 'scheduled')
+                    ->where('scheduled_at', '>=', now())
+                    ->count(),
             ],
+            'recent_applications' => Application::with(['applicant', 'jobPosition', 'interview'])
+                ->latest()
+                ->take(5)
+                ->get(),
         ]);
     }
 }

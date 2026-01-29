@@ -11,11 +11,26 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard } from '@/routes';
+import { dashboard, home } from '@/routes';
+import { index as applicationsIndex } from '@/routes/dashboard/applications';
+import {
+    index as interviewsIndex,
+    pending as interviewsPending,
+} from '@/routes/dashboard/interviews';
+import { index as jobPositionsIndex } from '@/routes/dashboard/job-positions';
+import { index as publicJobsIndex } from '@/routes/jobs';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
-import { Activity, Briefcase, Folder, LayoutGrid } from 'lucide-vue-next';
+import {
+    Activity,
+    Briefcase,
+    Calendar,
+    Folder,
+    LayoutGrid,
+    Link as LinkIcon,
+} from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
+import GeneralBookingButton from './GeneralBookingButton.vue';
 
 const mainNavItems: NavItem[] = [
     {
@@ -25,25 +40,35 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Job Positions',
-        href: '/dashboard/job-positions',
+        href: jobPositionsIndex(),
         icon: Briefcase,
     },
     {
         title: 'Applications',
-        href: '/dashboard/applications',
+        href: applicationsIndex(),
         icon: Folder,
+    },
+    {
+        title: 'Interviews & Calendar',
+        href: interviewsIndex(),
+        icon: Calendar,
+    },
+    {
+        title: 'Pending Links',
+        href: interviewsPending(),
+        icon: LinkIcon,
     },
 ];
 
 const footerNavItems: NavItem[] = [
     {
         title: 'Home Page',
-        href: 'localhost', //'https://prexta.com',
+        href: home(),
         icon: Activity,
     },
     {
         title: 'Published Jobs',
-        href: 'jobs',
+        href: publicJobsIndex(),
         icon: Briefcase,
     },
 ];
@@ -65,6 +90,13 @@ const footerNavItems: NavItem[] = [
 
         <SidebarContent>
             <NavMain :items="mainNavItems" />
+            <div class="px-4 py-2">
+                <GeneralBookingButton
+                    variant="secondary"
+                    size="sm"
+                    class="w-full justify-start"
+                />
+            </div>
         </SidebarContent>
 
         <SidebarFooter>
