@@ -4,7 +4,7 @@
 
 **PHP 8.4+**
 ```bash
-sudo apt install -y php
+/bin/bash -c "$(curl -fsSL https://php.new/install/linux/8.4)"
 ```
 
 **Composer**
@@ -31,8 +31,6 @@ sudo usermod -aG docker $USER
 ```
 > Log out and back in after installing Docker for the group change to take effect.
 
-
-
 ## Install (first time)
 
 ```bash
@@ -50,134 +48,34 @@ composer run dev
 
 ---
 
-## Deploy with Docker (production)
+## Deploy with Docker (Production & Client Deliverable)
 
-This packages the entire app into a self-contained Docker image. The client only needs Docker.
+The application includes a fully automated, production-ready Docker deployment using Apache, PHP 8.4, and an integrated Node build phase. It dynamically links to a MySQL database and automatically runs required caching and migrations on boot.
 
-### 1. Create `Dockerfile` at the project root
+### Run the App
 
-```dockerfile
-FROM php:8.4-fpm-alpine
-
-# Install system dependencies
-RUN apk add --no-cache nginx nodejs npm curl libpng-dev oniguruma-dev libxml2-dev \
-    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
-
-# Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-WORKDIR /var/www/html
-
-# Copy project files
-COPY . .
-
-# Install PHP dependencies (no dev)
-RUN composer install --no-dev --optimize-autoloader --no-interaction
-
-# Install JS dependencies and build assets
-RUN npm ci && npm run build && rm -rf node_modules
-
-# Set permissions
-RUN chown -R www-data:www-data storage bootstrap/cache
-
-# Copy nginx config
-COPY docker/nginx.conf /etc/nginx/nginx.conf
-
-# Copy entrypoint
-COPY docker/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-EXPOSE 80
-
-ENTRYPOINT ["/entrypoint.sh"]
-```
-
----
-
-### 2. Create `docker/entrypoint.sh`
+Instead of installing PHP, Composer, or NPM locally, simply build and start the containers using Docker Compose:
 
 ```bash
-#!/bin/sh
-php artisan migrate --force
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
-
-# Start PHP-FPM and nginx
-php-fpm -D
-nginx -g "daemon off;"
+docker compose -f docker-compose.prod.yml up -d --build
 ```
 
----
+The application will be available at **http://localhost:8000** once the database fully initializes (usually takes 15-30 seconds on first boot).
 
-### 3. Create `docker/nginx.conf`
-
-```nginx
-events {}
-http {
-    include mime.types;
-    server {
-        listen 80;
-        root /var/www/html/public;
-        index index.php;
-
-        location / {
-            try_files $uri $uri/ /index.php?$query_string;
-        }
-
-        location ~ \.php$ {
-            fastcgi_pass 127.0.0.1:9000;
-            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-            include fastcgi_params;
-        }
-    }
-}
-```
-
----
-
-### 4. Create `docker-compose.yml`
-
-```yaml
-services:
-  app:
-    build: .
-    ports:
-      - "80:80"
-    environment:
-      APP_ENV: production
-      APP_KEY: base64:GENERATE_WITH_php_artisan_key_generate
-      DB_CONNECTION: mysql
-      DB_HOST: mysql
-      DB_PORT: 3306
-      DB_DATABASE: prexta
-      DB_USERNAME: prexta
-      DB_PASSWORD: secret
-    depends_on:
-      - mysql
-
-  mysql:
-    image: mysql:8.4
-    environment:
-      MYSQL_DATABASE: prexta
-      MYSQL_USER: prexta
-      MYSQL_PASSWORD: secret
-      MYSQL_ROOT_PASSWORD: secret
-    volumes:
-      - db_data:/var/lib/mysql
-
-volumes:
-  db_data:
-```
-
----
-
-### 5. Build and run
-
+To stop the containers safely:
 ```bash
-docker compose up --build
+docker compose -f docker-compose.prod.yml down
 ```
 
-The app will be available at **http://localhost**.
+### Exposing with Ngrok (Optional)
 
-> Generate a fresh `APP_KEY` with `php artisan key:generate --show` and paste it into the `docker-compose.yml`.
+If you need to instantly expose the local application over the internet securely (like demonstrating it live), we have provided a separate `docker-compose.ngrok.yml` overlay.
+
+Ensure you have your token in your `.env` file (`NGROK_AUTHTOKEN=your_token_here`).
+
+Then simply attach the Ngrok composer to your running production environment:
+```bash
+docker compose -f docker-compose.prod.yml -f docker-compose.ngrok.yml up -d
+```
+
+Visit the Ngrok dashboard at **http://localhost:4040** to retrieve your public forwarding URL.
