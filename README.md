@@ -2,8 +2,36 @@
 
 ## Requirements
 
-- Docker installed and running
-- PHP, Composer, and Node.js installed
+**PHP 8.4+**
+```bash
+sudo apt install -y php
+```
+
+**Composer**
+```bash
+php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+php -r "if (hash_file('sha384', 'composer-setup.php') === 'c8b085408188070d5f52bcfe4ecfbee5f727afa458b2573b8eaaf77b3419b0bf2768dc67c86944da1544f06fa544fd47') { echo 'Installer verified'.PHP_EOL; } else { echo 'Installer corrupt'.PHP_EOL; unlink('composer-setup.php'); exit(1); }"
+php composer-setup.php --install-dir=bin
+php -r "unlink('composer-setup.php');"
+```
+**LARAVEL**
+```bash
+composer global require laravel/installer
+```
+**Node.js 20+**
+```bash
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt install -y nodejs
+```
+
+**Docker**
+```bash
+curl -fsSL https://get.docker.com | sh
+sudo usermod -aG docker $USER
+```
+> Log out and back in after installing Docker for the group change to take effect.
+
+
 
 ## Install (first time)
 
