@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,11 +13,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // Check if environment variables are set to create the default admin user.
+        if (env('DEFAULT_ADMIN_EMAIL') && env('DEFAULT_ADMIN_PASSWORD')) {
+            User::firstOrCreate(
+                ['email' => env('DEFAULT_ADMIN_EMAIL')],
+                [
+                    'name' => env('DEFAULT_ADMIN_NAME', 'Admin'),
+                    'password' => Hash::make(env('DEFAULT_ADMIN_PASSWORD')),
+                    'email_verified_at' => now(),
+                ]
+            );
+        }
     }
 }
