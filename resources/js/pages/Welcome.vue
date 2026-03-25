@@ -19,30 +19,30 @@ withDefaults(
 
 const sectors = [
     {
-        title: 'Transformation Digitale',
+        title: "Architecture d'Entreprise & Cadrage Stratégique",
         description:
-            "Accompagnement dans la modernisation de vos infrastructures et l'adoption de nouvelles technologies.",
+            "Dans des environnements SI complexes et hétérogènes, les décisions techniques engagent durablement les organisations. Prexta accompagne ses clients afin de :\n● Analyser l'existant et identifier les fragilités structurelles\n● Définir une cible réaliste, priorisée et gouvernée\n● Arbitrer entre contraintes métiers, techniques, financières et réglementaires\n● sécuriser les investissements IT et les trajectoires de transformation",
         icon: 'M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',
         color: 'prexta-blue',
     },
     {
-        title: 'Stratégie RH & Recrutement',
+        title: "Cybersécurité & Résilience des Systèmes d'Information",
         description:
-            "Optimisation de vos processus d'acquisition de talents et gestion du capital humain.",
+            "L'augmentation des menaces cyber et la complexité des environnements IT exigent des dispositifs de sécurité robustes et opérationnels. Prexta accompagne les organisations pour :\n● Renforcer leur posture de sécurité globale\n● Protéger les infrastructures et données critiques\n● Améliorer la capacité de détection et de réponse aux incidents\n● Structurer une gouvernance cyber efficace",
         icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z',
         color: 'prexta-cyan',
     },
     {
-        title: 'Conseil en Management',
+        title: 'Cloud, Infrastructures & Exploitation IT',
         description:
-            'Amélioration de la performance opérationnelle et conduite du changement organisationnel.',
+            "Les infrastructures et environnements cloud sont au cœur des systèmes d'information modernes. Prexta accompagne ses clients pour :\n● Concevoir des environnements adaptés aux enjeux métiers\n● Sécuriser l'exploitation et la continuité de service\n● Piloter des projets techniques complexes\n● Maîtriser les coûts, délais et risques opérationnels",
         icon: 'M13 10V3L4 14h7v7l9-11h-7z',
         color: 'prexta-indigo',
     },
     {
-        title: 'Data & Analytics',
+        title: 'Data, Gouvernance & Intelligence Artificielle',
         description:
-            'Valorisation de vos données pour une prise de décision stratégique éclairée.',
+            "La donnée est un actif stratégique, mais souvent sous-exploité. Prexta accompagne ses clients pour :\n● Structurer leurs plateformes data\n● Fiabiliser et gouverner les données\n● Généraliser les usages IA au sein du SI\n● Intégrer et piloter les agents IA (Protocole A2A)\n● Sécuriser les flux et les traitements de données sensibles\n● MoM et MoF",
         icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z',
         color: 'prexta-blue',
     },
@@ -170,7 +170,7 @@ onMounted(() => {
                 class="mt-8 flex flex-col items-center gap-2 text-6xl leading-[0.9] font-[1000] tracking-[-0.05em] sm:text-8xl lg:text-[10rem]"
             >
                 <span class="reveal reveal-fade-up" style="--delay: 100ms"
-                    >Tech With A</span
+                    >Tech With A.</span
                 >
                 <span
                     class="text-gradient reveal reveal-scale-up underline decoration-prexta-blue/20 decoration-[32px] underline-offset-[-15px]"
@@ -183,8 +183,10 @@ onMounted(() => {
                 class="reveal reveal-fade-up mt-12 max-w-2xl text-lg leading-relaxed font-medium text-gray-600 md:text-2xl dark:text-gray-400"
                 style="--delay: 400ms"
             >
-                Nous fusionnons technologie de pointe et vision stratégique pour
-                catapulter votre entreprise vers de nouveaux sommets.
+                Nous intervenons là où les projets critiques nécessitent une
+                vision globale, des arbitrages structurants et une gouvernance
+                solide pour sécuriser les investissements IT, maîtriser les
+                risques et garantir la réussite des transformations.
             </p>
 
             <div
@@ -233,16 +235,18 @@ onMounted(() => {
                             style="--delay: 200ms"
                         >
                             <p>
-                                <strong>Prexta</strong> est le catalyseur de la
-                                nouvelle économie. Né de la rencontre entre
-                                ingénierie d'élite et conseil en management,
-                                nous brisons les silos traditionnels pour offrir
-                                une vision holistique et futuriste.
+                                <strong>Prexta</strong> un cabinet de conseil
+                                premium spécialisé en Architecture d'Entreprise,
+                                Architectures IT, Transformation Digitale et
+                                Ingénierie (Data, Cyber, Cloud, Ops, IA),
+                                apportant expertise, séniorité et éthique.
                             </p>
                             <p>
-                                Nous ne nous contentons pas de conseiller, nous
-                                injectons de l'innovation dans chaque pore de
-                                votre organisation.
+                                Nous accompagnons les organisations dans la
+                                conception, la transformation et la gouvernance
+                                des systèmes d'information stratégiques, en
+                                plaçant l'architecture, l'IA et l'ingénierie au
+                                cœur des décisions.
                             </p>
                         </div>
 
@@ -286,11 +290,17 @@ onMounted(() => {
                         style="--delay: 400ms"
                     >
                         <div
-                            class="group relative aspect-[3/4] overflow-hidden rounded-3xl bg-white shadow-2xl dark:bg-gray-900"
+                            class="group relative overflow-hidden rounded-3xl bg-white shadow-2xl dark:bg-gray-900"
                         >
                             <div
                                 class="absolute inset-0 bg-prexta-gradient opacity-10 transition-opacity group-hover:opacity-40"
                             ></div>
+                            <div class="relative z-10 p-6 text-sm font-bold leading-relaxed space-y-3 text-gray-700 dark:text-gray-300">
+                                <p>Compréhension & qualification du besoin : analyse du SI existant, enjeux métiers et risques</p>
+                                <p>Cadrage & trajectoire : définition d'une cible réaliste et priorisée</p>
+                                <p>Arbitrage & gouvernance : aide à la décision et comités d'architecture.</p>
+                                <p>Mise en œuvre sécurisée : déclinaison via IA Ready, Cloud, Cyber, Data ou Ops.</p>
+                            </div>
                             <div class="absolute bottom-8 left-8">
                                 <div
                                     class="mb-4 h-1.5 w-12 rounded-full bg-black dark:bg-white"
@@ -298,21 +308,26 @@ onMounted(() => {
                                 <div
                                     class="text-xs font-black tracking-widest text-black uppercase dark:text-white"
                                 >
-                                    Futurisme
+                                    Notre approche
                                 </div>
                             </div>
                         </div>
                         <div
-                            class="group relative aspect-[3/4] translate-y-12 overflow-hidden rounded-3xl bg-white shadow-2xl dark:bg-gray-900"
+                            class="group relative translate-y-12 overflow-hidden rounded-3xl bg-white shadow-2xl dark:bg-gray-900"
                         >
                             <div
                                 class="absolute inset-0 bg-prexta-cyan/10 opacity-10 transition-opacity group-hover:opacity-40"
                             ></div>
-                            <div class="absolute bottom-8 left-8">
+                            <div class="relative z-10 p-6 text-sm font-bold leading-relaxed space-y-3 text-gray-700 dark:text-gray-300">
+                                <p>Vision transverse Métier / IT / Sécurité.</p>
+                                <p>Approche orientée décision, vision indépendante.</p>
+                                <p>Culture du résultat maîtrisé (forfait, conseil et assistance technique).</p>
+                            </div>
+                            <div class="absolute bottom-8 left-8 right-8">
                                 <div
                                     class="text-xs font-black tracking-widest text-black uppercase dark:text-white"
                                 >
-                                    Impact
+                                    Éclairer les décisions IT. Structurer les trajectoires. Réussir les projets complexes
                                 </div>
                             </div>
                         </div>
@@ -369,7 +384,7 @@ onMounted(() => {
                             {{ sector.title }}
                         </h3>
                         <p
-                            class="text-sm leading-relaxed text-gray-500 dark:text-gray-400"
+                            class="whitespace-pre-line text-sm leading-relaxed text-gray-500 dark:text-gray-400"
                         >
                             {{ sector.description }}
                         </p>
@@ -399,11 +414,12 @@ onMounted(() => {
                     class="reveal reveal-fade-up flex flex-col justify-center gap-6 sm:flex-row"
                     style="--delay: 200ms"
                 >
-                    <button
+                    <a
+                        href="#contact"
                         class="rounded-full bg-white px-12 py-6 text-lg font-black text-black transition-all hover:scale-110 hover:shadow-2xl"
                     >
                         START THE AUDIT
-                    </button>
+                    </a>
                     <Link
                         :href="jobsIndex.url()"
                         class="rounded-full border-2 border-white/10 px-12 py-6 text-lg font-black text-white transition-all hover:bg-white/5"
@@ -481,9 +497,7 @@ onMounted(() => {
                                         />
                                     </svg>
                                 </div>
-                                <span class="text-lg font-bold"
-                                    >Paris Strategy Hub</span
-                                >
+                                <span class="text-lg font-bold">Paris</span>
                             </div>
                         </div>
                     </div>
@@ -643,7 +657,7 @@ onMounted(() => {
                                 <Link
                                     :href="jobsIndex.url()"
                                     class="transition-colors hover:text-prexta-blue"
-                                    >Careers</Link
+                                    >Carrières</Link
                                 >
                             </li>
                             <li>
@@ -655,38 +669,12 @@ onMounted(() => {
                             </li>
                         </ul>
                     </div>
-
-                    <div>
-                        <h4
-                            class="mb-10 text-[10px] font-black tracking-[0.3em] text-gray-300 uppercase"
-                        >
-                            Hub
-                        </h4>
-                        <p class="mb-2 font-bold text-gray-500">
-                            Paris Strategy Hub
-                        </p>
-                        <p class="text-sm text-gray-400">
-                            12 Avenue de la Stratégie, 75008
-                        </p>
-                    </div>
                 </div>
 
                 <div
                     class="flex items-center justify-between border-t border-gray-50 pt-8 text-[10px] font-black tracking-[0.3em] text-gray-400 uppercase dark:border-gray-900"
                 >
                     <span>&copy; PREXTA {{ new Date().getFullYear() }}</span>
-                    <div class="flex gap-8">
-                        <a
-                            href="#"
-                            class="transition-colors hover:text-prexta-blue"
-                            >LinkedIn</a
-                        >
-                        <a
-                            href="#"
-                            class="transition-colors hover:text-prexta-blue"
-                            >X</a
-                        >
-                    </div>
                 </div>
             </div>
         </footer>
