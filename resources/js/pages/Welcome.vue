@@ -170,7 +170,7 @@ onMounted(() => {
                 class="mt-8 flex flex-col items-center gap-2 text-6xl leading-[0.9] font-[1000] tracking-[-0.05em] sm:text-8xl lg:text-[10rem]"
             >
                 <span class="reveal reveal-fade-up" style="--delay: 100ms"
-                    >Tech With A.</span
+                    >Tech With A</span
                 >
                 <span
                     class="text-gradient reveal reveal-scale-up underline decoration-prexta-blue/20 decoration-[32px] underline-offset-[-15px]"

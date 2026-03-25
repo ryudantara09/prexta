@@ -54,10 +54,10 @@ The application includes a fully automated, production-ready Docker deployment u
 
 ### Run the App
 
-Instead of installing PHP, Composer, or NPM locally, simply build and start the containers using Docker Compose:
+Instead of installing PHP, Composer, or NPM locally, simply build for the first time by adding `--build` flag and start the containers using Docker Compose:
 
 ```bash
-docker compose -f docker-compose.prod.yml up -d --build
+docker compose -f docker-compose.prod.yml up -d #--build
 ```
 
 The application will be available at **http://localhost:8000** once the database fully initializes (usually takes 15-30 seconds on first boot).
