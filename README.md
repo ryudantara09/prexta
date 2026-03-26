@@ -49,7 +49,7 @@ cp .env.local.example .env.local
 Start the database and dev server:
 ```bash
 ./vendor/bin/sail up -d mysql
-APP_ENV=local php artisan serve
+APP_ENV=local php artisan serve --host=127.0.0.1 --port=8000
 ```
 
 In a separate terminal, start Vite:
@@ -66,6 +66,7 @@ The `APP_ENV=local` prefix tells Laravel to load `.env.local` instead of `.env`,
 To expose your locally running app over the internet using the ngrok Docker image:
 
 ```bash
+rm -f public/hot && npm run build
 docker run --net=host -it -e NGROK_AUTHTOKEN=1kcdAWlZ1NskoO5k5FORoy1AgN6_5rnaAnKSDKnh4ueRF9yim ngrok/ngrok:latest http --url=nongenerically-brideless-tempie.ngrok-free.dev 8000
 ```
 
