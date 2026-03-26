@@ -5,6 +5,8 @@ import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import InsightFlowCard from '@/components/welcome/InsightFlowCard.vue';
+import SectorCard from '@/components/welcome/SectorCard.vue';
 import { Form, Head, Link } from '@inertiajs/vue3';
 import { onMounted } from 'vue';
 
@@ -17,7 +19,19 @@ withDefaults(
     },
 );
 
-const sectors = [
+type SectorItem = {
+    title: string;
+    description: string;
+    icon: string;
+    color: 'prexta-blue' | 'prexta-cyan' | 'prexta-indigo';
+};
+
+type InsightItem = {
+    title?: string;
+    body: string;
+};
+
+const sectors: SectorItem[] = [
     {
         title: "Architecture d'Entreprise & Cadrage Stratégique",
         description:
@@ -42,9 +56,40 @@ const sectors = [
     {
         title: 'Data, Gouvernance & Intelligence Artificielle',
         description:
-            "La donnée est un actif stratégique, mais souvent sous-exploité. Prexta accompagne ses clients pour :\n● Structurer leurs plateformes data\n● Fiabiliser et gouverner les données\n● Généraliser les usages IA au sein du SI\n● Intégrer et piloter les agents IA (Protocole A2A)\n● Sécuriser les flux et les traitements de données sensibles\n● MoM et MoF",
+            'La donnée est un actif stratégique, mais souvent sous-exploité. Prexta accompagne ses clients pour :\n● Structurer leurs plateformes data\n● Fiabiliser et gouverner les données\n● Généraliser les usages IA au sein du SI\n● Intégrer et piloter les agents IA (Protocole A2A)\n● Sécuriser les flux et les traitements de données sensibles\n● MoM et MoF',
         icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z',
         color: 'prexta-blue',
+    },
+];
+
+const approachItems: InsightItem[] = [
+    {
+        title: 'Compréhension & qualification du besoin',
+        body: 'analyse du SI existant, enjeux métiers et risques.',
+    },
+    {
+        title: 'Cadrage & trajectoire',
+        body: "définition d'une cible réaliste et priorisée.",
+    },
+    {
+        title: 'Arbitrage & gouvernance',
+        body: "aide à la décision et comités d'architecture.",
+    },
+    {
+        title: 'Mise en œuvre sécurisée',
+        body: 'déclinaison via IA Ready, Cloud, Cyber, Data ou Ops.',
+    },
+];
+
+const methodItems: InsightItem[] = [
+    {
+        body: 'Vision transverse Métier / IT / Sécurité.',
+    },
+    {
+        body: 'Approche orientée décision, vision indépendante.',
+    },
+    {
+        body: 'Culture du résultat maîtrisé (forfait, conseil et assistance technique).',
     },
 ];
 
@@ -91,7 +136,7 @@ onMounted(() => {
 
         <!-- Header -->
         <header
-            class="relative z-50 mx-auto flex max-w-7xl items-center justify-between px-6 py-8"
+            class="relative z-50 mx-auto flex max-w-7xl items-center justify-between px-6 py-4"
         >
             <div class="reveal reveal-fade flex items-center gap-2">
                 <div
@@ -164,10 +209,10 @@ onMounted(() => {
 
         <!-- Hero Section -->
         <main
-            class="relative z-10 mx-auto flex max-w-6xl flex-col items-center px-6 pt-20 pb-24 text-center lg:pt-32 lg:pb-40"
+            class="relative z-10 mx-auto flex max-w-6xl flex-col items-center px-6 pt-10 pb-14 text-center lg:pt-14 lg:pb-20"
         >
             <h1
-                class="mt-8 flex flex-col items-center gap-2 text-6xl leading-[0.9] font-black tracking-[-0.05em] sm:text-8xl lg:text-[10rem]"
+                class="mt-4 flex flex-col items-center gap-2 text-5xl leading-[0.9] font-black tracking-[-0.05em] sm:text-7xl lg:text-[7rem]"
             >
                 <span class="reveal reveal-fade-up" style="--delay: 100ms"
                     >Tech With A</span
@@ -180,7 +225,7 @@ onMounted(() => {
             </h1>
 
             <p
-                class="reveal reveal-fade-up mt-12 max-w-2xl text-lg leading-relaxed font-medium text-gray-600 md:text-2xl dark:text-gray-400"
+                class="reveal reveal-fade-up mt-8 max-w-2xl text-base leading-relaxed font-medium text-gray-600 md:text-xl dark:text-gray-400"
                 style="--delay: 400ms"
             >
                 Nous intervenons là où les projets critiques nécessitent une
@@ -190,12 +235,12 @@ onMounted(() => {
             </p>
 
             <div
-                class="reveal reveal-fade-up mt-16 flex flex-col items-center gap-6 sm:flex-row"
+                class="reveal reveal-fade-up mt-10 flex flex-col items-center gap-4 sm:flex-row"
                 style="--delay: 600ms"
             >
                 <Link
                     :href="jobsIndex.url()"
-                    class="group relative overflow-hidden rounded-full bg-[#1b1b18] px-10 py-5 text-lg font-black text-white shadow-2xl transition-all hover:scale-110 active:scale-95 dark:bg-white dark:text-black"
+                    class="group relative overflow-hidden rounded-full bg-[#1b1b18] px-8 py-4 text-base font-black text-white shadow-xl transition-all hover:scale-105 active:scale-95 dark:bg-white dark:text-black"
                 >
                     <span class="relative z-10">REJOINDRE L'AVENTURE</span>
                     <div
@@ -204,7 +249,7 @@ onMounted(() => {
                 </Link>
                 <a
                     href="#sectors"
-                    class="rounded-full border-2 border-gray-100 bg-white/50 px-10 py-5 text-lg font-black backdrop-blur-sm transition-all hover:bg-gray-50 active:scale-95 dark:border-gray-800 dark:bg-black/50 dark:hover:bg-gray-900"
+                    class="rounded-full border-2 border-gray-100 bg-white/50 px-8 py-4 text-base font-black backdrop-blur-sm transition-all hover:bg-gray-50 active:scale-95 dark:border-gray-800 dark:bg-black/50 dark:hover:bg-gray-900"
                 >
                     NOS EXPERTISES
                 </a>
@@ -214,24 +259,24 @@ onMounted(() => {
         <!-- À Propos -->
         <section
             id="about"
-            class="relative z-10 border-y border-gray-100 bg-gray-50/30 px-6 py-32 dark:border-gray-950 dark:bg-gray-950/20"
+            class="relative z-10 border-y border-gray-100 bg-gray-50/30 px-6 py-16 dark:border-gray-950 dark:bg-gray-950/20"
         >
             <div class="mx-auto max-w-7xl">
-                <div class="grid items-center gap-24 lg:grid-cols-2">
+                <div class="grid items-center gap-10 lg:grid-cols-2">
                     <div class="relative">
                         <div
                             class="reveal reveal-fade absolute -top-12 -left-12 h-64 w-64 rounded-full bg-prexta-gradient opacity-10 blur-3xl"
                             style="--duration: 2s"
                         ></div>
                         <h2
-                            class="reveal reveal-slide-left mb-10 text-5xl leading-none font-black tracking-tighter lg:text-7xl"
+                            class="reveal reveal-slide-left mb-6 text-4xl leading-none font-black tracking-tighter lg:text-6xl"
                         >
                             Qui sommes <br /><span class="text-gradient"
                                 >nous ?</span
                             >
                         </h2>
                         <div
-                            class="reveal reveal-slide-left space-y-6 text-lg leading-relaxed text-gray-600 dark:text-gray-400"
+                            class="reveal reveal-slide-left space-y-4 text-base leading-relaxed text-gray-600 dark:text-gray-400"
                             style="--delay: 200ms"
                         >
                             <p>
@@ -250,13 +295,13 @@ onMounted(() => {
                             </p>
                         </div>
 
-                        <div class="mt-12 grid grid-cols-2 gap-8">
+                        <div class="mt-8 grid grid-cols-2 gap-6">
                             <div
                                 class="reveal reveal-fade-up"
                                 style="--delay: 300ms"
                             >
                                 <div
-                                    class="animate-[pulse_4s_infinite] text-4xl font-black text-prexta-blue"
+                                    class="animate-[pulse_4s_infinite] text-3xl font-black text-prexta-blue"
                                 >
                                     150+
                                 </div>
@@ -271,7 +316,7 @@ onMounted(() => {
                                 style="--delay: 400ms"
                             >
                                 <div
-                                    class="animate-[pulse_4s_infinite] text-4xl font-black text-prexta-cyan"
+                                    class="animate-[pulse_4s_infinite] text-3xl font-black text-prexta-cyan"
                                     style="animation-delay: 1s"
                                 >
                                     12
@@ -286,153 +331,58 @@ onMounted(() => {
                     </div>
 
                     <div
-                        class="reveal reveal-scale-up grid grid-cols-1 gap-4 lg:grid-cols-2"
+                        class="reveal reveal-scale-up grid grid-cols-1 gap-3 xl:grid-cols-2"
                         style="--delay: 400ms"
                     >
-                        <div
-                            class="group relative overflow-hidden rounded-3xl bg-white shadow-2xl dark:bg-gray-900"
-                        >
-                            <div
-                                class="absolute inset-0 bg-prexta-gradient opacity-10 transition-opacity group-hover:opacity-40"
-                            ></div>
-                            <div
-                                class="relative z-10 flex h-full flex-col gap-6 p-6 sm:p-8"
-                            >
-                                <div class="space-y-3 text-sm leading-relaxed text-gray-700 dark:text-gray-300">
-                                    <div class="rounded-xl bg-gray-50/80 p-3 dark:bg-gray-800/60">
-                                        <p>
-                                            <span class="font-black text-prexta-blue">Compréhension & qualification du besoin :</span>
-                                            analyse du SI existant, enjeux métiers et risques.
-                                        </p>
-                                    </div>
-                                    <div class="rounded-xl bg-gray-50/80 p-3 dark:bg-gray-800/60">
-                                        <p>
-                                            <span class="font-black text-prexta-blue">Cadrage & trajectoire :</span>
-                                            définition d'une cible réaliste et priorisée.
-                                        </p>
-                                    </div>
-                                    <div class="rounded-xl bg-gray-50/80 p-3 dark:bg-gray-800/60">
-                                        <p>
-                                            <span class="font-black text-prexta-blue">Arbitrage & gouvernance :</span>
-                                            aide à la décision et comités d'architecture.
-                                        </p>
-                                    </div>
-                                    <div class="rounded-xl bg-gray-50/80 p-3 dark:bg-gray-800/60">
-                                        <p>
-                                            <span class="font-black text-prexta-blue">Mise en oeuvre sécurisée :</span>
-                                            déclinaison via IA Ready, Cloud, Cyber, Data ou Ops.
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="mt-auto pt-2">
-                                    <div
-                                        class="mb-3 h-1.5 w-12 rounded-full bg-black dark:bg-white"
-                                    ></div>
-                                    <div
-                                        class="text-xs font-black tracking-widest text-black uppercase dark:text-white"
-                                    >
-                                        Notre approche
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div
-                            class="group relative overflow-hidden rounded-3xl bg-white shadow-2xl dark:bg-gray-900 lg:translate-y-12"
-                        >
-                            <div
-                                class="absolute inset-0 bg-prexta-cyan/10 opacity-10 transition-opacity group-hover:opacity-40"
-                            ></div>
-                            <div
-                                class="relative z-10 flex h-full flex-col gap-6 p-6 sm:p-8"
-                            >
-                                <div class="space-y-3 text-sm leading-relaxed text-gray-700 dark:text-gray-300">
-                                    <div class="rounded-xl bg-gray-50/80 p-3 dark:bg-gray-800/60">
-                                        <p>Vision transverse Métier / IT / Sécurité.</p>
-                                    </div>
-                                    <div class="rounded-xl bg-gray-50/80 p-3 dark:bg-gray-800/60">
-                                        <p>Approche orientée décision, vision indépendante.</p>
-                                    </div>
-                                    <div class="rounded-xl bg-gray-50/80 p-3 dark:bg-gray-800/60">
-                                        <p>
-                                            Culture du résultat maîtrisé (forfait, conseil et assistance technique).
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="mt-auto pt-2">
-                                    <div
-                                        class="text-xs font-black tracking-widest text-black uppercase dark:text-white"
-                                    >
-                                        Éclairer les décisions IT. Structurer les trajectoires. Réussir les projets complexes.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <InsightFlowCard
+                            heading="Notre approche"
+                            :items="approachItems"
+                            footer="Notre approche"
+                            accent="blue"
+                        />
+
+                        <InsightFlowCard
+                            :items="methodItems"
+                            footer="Éclairer les décisions IT. Structurer les trajectoires. Réussir les projets complexes."
+                            accent="cyan"
+                        />
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Expertise -->
-        <section id="sectors" class="relative z-10 px-6 py-32">
+        <section id="sectors" class="relative z-10 px-6 py-16">
             <div class="mx-auto max-w-7xl">
-                <div class="reveal reveal-fade-up mb-24 text-center">
+                <div class="reveal reveal-fade-up mb-10 text-center">
                     <h2
-                        class="text-5xl font-black tracking-tighter lg:text-7xl"
+                        class="text-4xl font-black tracking-tighter lg:text-6xl"
                     >
                         Notre <span class="text-gradient">ADN.</span>
                     </h2>
                     <p
-                        class="mx-auto mt-6 max-w-2xl text-xl font-medium text-gray-400"
+                        class="mx-auto mt-4 max-w-2xl text-lg font-medium text-gray-400"
                     >
                         Quatre piliers fondamentaux pour une transformation sans
                         compromis.
                     </p>
                 </div>
 
-                <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-                    <div
+                <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                    <SectorCard
                         v-for="(sector, index) in sectors"
                         :key="sector.title"
-                        class="group reveal reveal-fade-up relative rounded-[3rem] border border-gray-100 bg-white p-10 transition-all hover:-translate-y-2 hover:shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] dark:border-gray-800 dark:bg-gray-900/40"
-                        :style="{ '--delay': `${index * 150}ms` }"
-                    >
-                        <div
-                            :class="`flex h-16 w-16 items-center justify-center rounded-2xl bg-${sector.color}/10 text-${sector.color} mb-8 ring-8 ring-transparent transition-all group-hover:rotate-6 group-hover:bg-prexta-gradient group-hover:text-white group-hover:ring-${sector.color}/5`"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="h-8 w-8"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    :d="sector.icon"
-                                />
-                            </svg>
-                        </div>
-                        <h3
-                            class="group-hover:text-gradient mb-4 text-2xl leading-tight font-black transition-all"
-                        >
-                            {{ sector.title }}
-                        </h3>
-                        <p
-                            class="whitespace-pre-line text-sm leading-relaxed text-gray-500 dark:text-gray-400"
-                        >
-                            {{ sector.description }}
-                        </p>
-                    </div>
+                        :sector="sector"
+                        :index="index"
+                    />
                 </div>
             </div>
         </section>
 
         <!-- CTA -->
-        <section class="relative z-10 px-6 py-24">
+        <section class="relative z-10 px-6 py-14">
             <div
-                class="reveal reveal-scale-up relative mx-auto max-w-6xl overflow-hidden rounded-[4rem] bg-[#1b1b18] px-12 py-32 text-center shadow-[0_64px_128px_-32px_rgba(0,0,0,0.4)]"
+                class="reveal reveal-scale-up relative mx-auto max-w-6xl overflow-hidden rounded-[3rem] bg-[#1b1b18] px-8 py-16 text-center shadow-[0_48px_96px_-32px_rgba(0,0,0,0.4)] sm:px-12"
             >
                 <div
                     class="absolute inset-0 bg-prexta-gradient opacity-[0.03]"
@@ -442,7 +392,7 @@ onMounted(() => {
                 ></div>
 
                 <h2
-                    class="reveal reveal-fade-up mb-10 text-5xl leading-none font-black text-white md:text-7xl"
+                    class="reveal reveal-fade-up mb-7 text-4xl leading-none font-black text-white md:text-6xl"
                 >
                     Prêt pour le <br /><span class="text-gradient">Jump ?</span>
                 </h2>
@@ -452,13 +402,13 @@ onMounted(() => {
                 >
                     <a
                         href="#contact"
-                        class="rounded-full bg-white px-12 py-6 text-lg font-black text-black transition-all hover:scale-110 hover:shadow-2xl"
+                        class="rounded-full bg-white px-8 py-4 text-base font-black text-black transition-all hover:scale-105 hover:shadow-2xl"
                     >
                         START THE AUDIT
                     </a>
                     <Link
                         :href="jobsIndex.url()"
-                        class="rounded-full border-2 border-white/10 px-12 py-6 text-lg font-black text-white transition-all hover:bg-white/5"
+                        class="rounded-full border-2 border-white/10 px-8 py-4 text-base font-black text-white transition-all hover:bg-white/5"
                     >
                         JOIN THE CREW
                     </Link>
@@ -467,19 +417,19 @@ onMounted(() => {
         </section>
 
         <!-- Contact Section -->
-        <section id="contact" class="relative z-10 overflow-hidden px-6 py-32">
+        <section id="contact" class="relative z-10 overflow-hidden px-6 py-16">
             <div class="mx-auto max-w-7xl">
-                <div class="grid items-center gap-24 lg:grid-cols-2">
+                <div class="grid items-center gap-12 lg:grid-cols-2">
                     <div class="reveal reveal-slide-left">
                         <h2
-                            class="mb-10 text-5xl leading-none font-black tracking-tighter lg:text-7xl"
+                            class="mb-6 text-4xl leading-none font-black tracking-tighter lg:text-6xl"
                         >
                             Contactez <br /><span class="text-gradient"
                                 >nous.</span
                             >
                         </h2>
                         <p
-                            class="mb-12 max-w-md text-xl leading-relaxed text-gray-500"
+                            class="mb-8 max-w-md text-lg leading-relaxed text-gray-500"
                         >
                             Une question ? Un projet ? Notre équipe d'experts
                             est à votre écoute pour propulser votre innovation.
@@ -546,7 +496,7 @@ onMounted(() => {
                             class="absolute -inset-4 rounded-[3rem] bg-prexta-gradient opacity-10 blur-3xl"
                         ></div>
                         <div
-                            class="relative rounded-[3rem] border border-gray-100 bg-white p-10 shadow-2xl dark:border-gray-800 dark:bg-gray-900"
+                            class="relative rounded-[2rem] border border-gray-100 bg-white p-6 shadow-2xl sm:p-8 dark:border-gray-800 dark:bg-gray-900"
                         >
                             <Form
                                 action="/contact"
@@ -639,10 +589,10 @@ onMounted(() => {
 
         <!-- Footer -->
         <footer
-            class="relative z-10 border-t border-gray-100 bg-white px-6 pt-32 pb-16 dark:border-gray-900 dark:bg-black"
+            class="relative z-10 border-t border-gray-100 bg-white px-6 pt-16 pb-10 dark:border-gray-900 dark:bg-black"
         >
             <div class="mx-auto max-w-7xl">
-                <div class="mb-24 grid gap-16 lg:grid-cols-4">
+                <div class="mb-12 grid gap-10 lg:grid-cols-4">
                     <div class="lg:col-span-2">
                         <div class="mb-8 flex items-center gap-2">
                             <div
@@ -663,7 +613,7 @@ onMounted(() => {
 
                     <div>
                         <h4
-                            class="mb-10 text-[10px] font-black tracking-[0.3em] text-gray-300 uppercase"
+                            class="mb-6 text-[10px] font-black tracking-[0.3em] text-gray-300 uppercase"
                         >
                             Navigation
                         </h4>
