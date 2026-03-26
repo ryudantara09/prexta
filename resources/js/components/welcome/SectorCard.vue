@@ -40,8 +40,9 @@ const colorClasses = computed(() => {
 
 <template>
     <div
-        class="group reveal reveal-fade-up relative rounded-3xl border border-gray-100 bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_48px_-16px_rgba(0,0,0,0.14)] dark:border-gray-800 dark:bg-gray-900/40"
+        class="group reveal reveal-fade-up relative rounded-3xl border border-gray-100 bg-white p-6 transition-all duration-300 focus-within:-translate-y-1 focus-within:shadow-[0_24px_48px_-16px_rgba(0,0,0,0.14)] hover:-translate-y-1 hover:shadow-[0_24px_48px_-16px_rgba(0,0,0,0.14)] dark:border-gray-800 dark:bg-gray-900/40"
         :style="{ '--delay': `${index * 120}ms` }"
+        tabindex="0"
     >
         <div
             class="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl ring-8 ring-transparent transition-all group-hover:rotate-3 group-hover:bg-prexta-gradient group-hover:text-white"
@@ -71,10 +72,15 @@ const colorClasses = computed(() => {
         >
             {{ sector.title }}
         </h3>
-        <p
-            class="text-sm leading-relaxed whitespace-pre-line text-gray-500 dark:text-gray-400"
-        >
-            {{ sector.description }}
-        </p>
+        <div class="relative">
+            <p
+                class="max-h-16 overflow-hidden text-sm leading-relaxed whitespace-pre-line text-gray-500 transition-[max-height] duration-300 group-focus-within:max-h-[28rem] group-hover:max-h-[28rem] dark:text-gray-400"
+            >
+                {{ sector.description }}
+            </p>
+            <div
+                class="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-white to-transparent transition-opacity duration-300 group-focus-within:opacity-0 group-hover:opacity-0 dark:from-gray-900/40"
+            ></div>
+        </div>
     </div>
 </template>

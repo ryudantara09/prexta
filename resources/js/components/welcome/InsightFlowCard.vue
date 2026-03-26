@@ -19,7 +19,7 @@ const props = withDefaults(
     },
 );
 
-const activeIndex = ref(0);
+const activeIndex = ref(-1);
 
 const accentClasses = computed(() => {
     if (props.accent === 'cyan') {
@@ -47,7 +47,7 @@ const accentClasses = computed(() => {
 <template>
     <section
         class="group relative overflow-hidden rounded-[1.75rem] border border-gray-200/70 bg-white/90 p-4 shadow-[0_14px_30px_-20px_rgba(0,0,0,0.45)] transition-all duration-300 sm:p-5 dark:border-gray-700/80 dark:bg-gray-900/80"
-        @mouseleave="activeIndex = 0"
+        @mouseleave="activeIndex = -1"
     >
         <div
             class="pointer-events-none absolute inset-0 bg-gradient-to-br opacity-90"
@@ -83,6 +83,7 @@ const accentClasses = computed(() => {
                     ]"
                     @mouseenter="activeIndex = index"
                     @focus="activeIndex = index"
+                    @blur="activeIndex = -1"
                 >
                     <span
                         class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full border text-[10px] font-black"
@@ -91,7 +92,14 @@ const accentClasses = computed(() => {
                         {{ index + 1 }}
                     </span>
 
-                    <p class="leading-relaxed text-gray-700 dark:text-gray-200">
+                    <p
+                        class="overflow-hidden leading-relaxed text-gray-700 transition-[max-height,opacity] duration-300 dark:text-gray-200"
+                        :class="
+                            activeIndex === index
+                                ? 'max-h-40 opacity-100'
+                                : 'max-h-5 opacity-85'
+                        "
+                    >
                         <span
                             v-if="item.title"
                             class="font-black"
@@ -99,7 +107,9 @@ const accentClasses = computed(() => {
                         >
                             {{ item.title }} :
                         </span>
-                        {{ item.body }}
+                        <span class="transition-all duration-300">
+                            {{ item.body }}
+                        </span>
                     </p>
                 </button>
             </div>
