@@ -167,13 +167,13 @@ onMounted(() => {
             class="relative z-10 mx-auto flex max-w-6xl flex-col items-center px-6 pt-20 pb-24 text-center lg:pt-32 lg:pb-40"
         >
             <h1
-                class="mt-8 flex flex-col items-center gap-2 text-6xl leading-[0.9] font-[1000] tracking-[-0.05em] sm:text-8xl lg:text-[10rem]"
+                class="mt-8 flex flex-col items-center gap-2 text-6xl leading-[0.9] font-black tracking-[-0.05em] sm:text-8xl lg:text-[10rem]"
             >
                 <span class="reveal reveal-fade-up" style="--delay: 100ms"
-                    >Tech With A.</span
+                    >Tech With A</span
                 >
                 <span
-                    class="text-gradient reveal reveal-scale-up underline decoration-prexta-blue/20 decoration-[32px] underline-offset-[-15px]"
+                    class="text-gradient reveal reveal-scale-up"
                     style="--delay: 300ms"
                     >Human Heartbeat</span
                 >
@@ -286,7 +286,7 @@ onMounted(() => {
                     </div>
 
                     <div
-                        class="reveal reveal-scale-up grid grid-cols-2 gap-4"
+                        class="reveal reveal-scale-up grid grid-cols-1 gap-4 lg:grid-cols-2"
                         style="--delay: 400ms"
                     >
                         <div
@@ -295,39 +295,75 @@ onMounted(() => {
                             <div
                                 class="absolute inset-0 bg-prexta-gradient opacity-10 transition-opacity group-hover:opacity-40"
                             ></div>
-                            <div class="relative z-10 p-6 text-sm font-bold leading-relaxed space-y-3 text-gray-700 dark:text-gray-300">
-                                <p>Compréhension & qualification du besoin : analyse du SI existant, enjeux métiers et risques</p>
-                                <p>Cadrage & trajectoire : définition d'une cible réaliste et priorisée</p>
-                                <p>Arbitrage & gouvernance : aide à la décision et comités d'architecture.</p>
-                                <p>Mise en œuvre sécurisée : déclinaison via IA Ready, Cloud, Cyber, Data ou Ops.</p>
-                            </div>
-                            <div class="absolute bottom-8 left-8">
-                                <div
-                                    class="mb-4 h-1.5 w-12 rounded-full bg-black dark:bg-white"
-                                ></div>
-                                <div
-                                    class="text-xs font-black tracking-widest text-black uppercase dark:text-white"
-                                >
-                                    Notre approche
+                            <div
+                                class="relative z-10 flex h-full flex-col gap-6 p-6 sm:p-8"
+                            >
+                                <div class="space-y-3 text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+                                    <div class="rounded-xl bg-gray-50/80 p-3 dark:bg-gray-800/60">
+                                        <p>
+                                            <span class="font-black text-prexta-blue">Compréhension & qualification du besoin :</span>
+                                            analyse du SI existant, enjeux métiers et risques.
+                                        </p>
+                                    </div>
+                                    <div class="rounded-xl bg-gray-50/80 p-3 dark:bg-gray-800/60">
+                                        <p>
+                                            <span class="font-black text-prexta-blue">Cadrage & trajectoire :</span>
+                                            définition d'une cible réaliste et priorisée.
+                                        </p>
+                                    </div>
+                                    <div class="rounded-xl bg-gray-50/80 p-3 dark:bg-gray-800/60">
+                                        <p>
+                                            <span class="font-black text-prexta-blue">Arbitrage & gouvernance :</span>
+                                            aide à la décision et comités d'architecture.
+                                        </p>
+                                    </div>
+                                    <div class="rounded-xl bg-gray-50/80 p-3 dark:bg-gray-800/60">
+                                        <p>
+                                            <span class="font-black text-prexta-blue">Mise en oeuvre sécurisée :</span>
+                                            déclinaison via IA Ready, Cloud, Cyber, Data ou Ops.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="mt-auto pt-2">
+                                    <div
+                                        class="mb-3 h-1.5 w-12 rounded-full bg-black dark:bg-white"
+                                    ></div>
+                                    <div
+                                        class="text-xs font-black tracking-widest text-black uppercase dark:text-white"
+                                    >
+                                        Notre approche
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div
-                            class="group relative translate-y-12 overflow-hidden rounded-3xl bg-white shadow-2xl dark:bg-gray-900"
+                            class="group relative overflow-hidden rounded-3xl bg-white shadow-2xl dark:bg-gray-900 lg:translate-y-12"
                         >
                             <div
                                 class="absolute inset-0 bg-prexta-cyan/10 opacity-10 transition-opacity group-hover:opacity-40"
                             ></div>
-                            <div class="relative z-10 p-6 text-sm font-bold leading-relaxed space-y-3 text-gray-700 dark:text-gray-300">
-                                <p>Vision transverse Métier / IT / Sécurité.</p>
-                                <p>Approche orientée décision, vision indépendante.</p>
-                                <p>Culture du résultat maîtrisé (forfait, conseil et assistance technique).</p>
-                            </div>
-                            <div class="absolute bottom-8 left-8 right-8">
-                                <div
-                                    class="text-xs font-black tracking-widest text-black uppercase dark:text-white"
-                                >
-                                    Éclairer les décisions IT. Structurer les trajectoires. Réussir les projets complexes
+                            <div
+                                class="relative z-10 flex h-full flex-col gap-6 p-6 sm:p-8"
+                            >
+                                <div class="space-y-3 text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+                                    <div class="rounded-xl bg-gray-50/80 p-3 dark:bg-gray-800/60">
+                                        <p>Vision transverse Métier / IT / Sécurité.</p>
+                                    </div>
+                                    <div class="rounded-xl bg-gray-50/80 p-3 dark:bg-gray-800/60">
+                                        <p>Approche orientée décision, vision indépendante.</p>
+                                    </div>
+                                    <div class="rounded-xl bg-gray-50/80 p-3 dark:bg-gray-800/60">
+                                        <p>
+                                            Culture du résultat maîtrisé (forfait, conseil et assistance technique).
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="mt-auto pt-2">
+                                    <div
+                                        class="text-xs font-black tracking-widest text-black uppercase dark:text-white"
+                                    >
+                                        Éclairer les décisions IT. Structurer les trajectoires. Réussir les projets complexes.
+                                    </div>
                                 </div>
                             </div>
                         </div>
