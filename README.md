@@ -37,14 +37,41 @@ sudo usermod -aG docker $USER
 composer run setup
 ```
 
-> Then set `DB_HOST=127.0.0.1` in your `.env` file.
+## Run (Local Development)
 
-## Run
+Create a local environment override file:
+```bash
+cp .env.local.example .env.local
+```
 
+> Edit `.env.local` and set your local MySQL credentials and copy `APP_KEY` from `.env`.
+
+Start the database and dev server:
 ```bash
 ./vendor/bin/sail up -d mysql
-composer run dev
+APP_ENV=local php artisan serve
 ```
+
+In a separate terminal, start Vite:
+```bash
+npm run dev
+```
+
+The `APP_ENV=local` prefix tells Laravel to load `.env.local` instead of `.env`, keeping the Docker configuration untouched.
+
+---
+
+## Exposing with Ngrok (Local Dev)
+
+To expose your locally running app over the internet using the ngrok Docker image:
+
+```bash
+docker run --net=host -it -e NGROK_AUTHTOKEN=1kcdAWlZ1NskoO5k5FORoy1AgN6_5rnaAnKSDKnh4ueRF9yim ngrok/ngrok:latest http --url=nongenerically-brideless-tempie.ngrok-free.dev 8000
+```
+
+> Replace `8000` with whichever port your local server is running on.
+
+Visit the Ngrok dashboard at **http://localhost:4040** to retrieve your public forwarding URL.
 
 ---
 
@@ -54,10 +81,15 @@ The application includes a fully automated, production-ready Docker deployment u
 
 ### Run the App
 
-Instead of installing PHP, Composer, or NPM locally, simply build for the first time by adding `--build` flag and start the containers using Docker Compose:
+Build and start the containers (use `--build` on first run or after code changes):
 
 ```bash
-docker compose -f docker-compose.prod.yml up -d #--build
+docker compose -f docker-compose.prod.yml up -d --build
+```
+
+On subsequent starts (no code changes), you can omit `--build`:
+```bash
+docker compose -f docker-compose.prod.yml up -d
 ```
 
 The application will be available at **http://localhost:8000** once the database fully initializes (usually takes 15-30 seconds on first boot).
@@ -69,13 +101,10 @@ docker compose -f docker-compose.prod.yml down
 
 ### Exposing with Ngrok (Optional)
 
-If you need to instantly expose the local application over the internet securely (like demonstrating it live), we have provided a separate `docker-compose.ngrok.yml` overlay.
+If you need to instantly expose the production Docker stack over the internet, use the ngrok compose overlay. Ensure `NGROK_AUTHTOKEN` is set in your `.env` file, then start everything together:
 
-Ensure you have your token in your `.env` file (`NGROK_AUTHTOKEN=your_token_here`).
-
-Then simply attach the Ngrok composer to your running production environment:
 ```bash
-docker compose -f docker-compose.prod.yml -f docker-compose.ngrok.yml up -d
+docker compose -f docker-compose.prod.yml -f docker-compose.ngrok.yml up -d --build
 ```
 
 Visit the Ngrok dashboard at **http://localhost:4040** to retrieve your public forwarding URL.
