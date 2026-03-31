@@ -35,28 +35,28 @@ const sectors: SectorItem[] = [
     {
         title: "Architecture d'Entreprise & Cadrage Stratégique",
         description:
-            "Dans des environnements SI complexes et hétérogènes, les décisions techniques engagent durablement les organisations. Prexta accompagne ses clients afin de :\n● Analyser l'existant et identifier les fragilités structurelles\n● Définir une cible réaliste, priorisée et gouvernée\n● Arbitrer entre contraintes métiers, techniques, financières et réglementaires\n● sécuriser les investissements IT et les trajectoires de transformation",
+            "Dans des environnements SI complexes et hétérogènes, les décisions techniques engagent durablement les organisations. Prexta accompagne ses clients afin de :\n- Analyser l'existant et identifier les fragilités structurelles\n- Définir une cible réaliste, priorisée et gouvernée\n- Arbitrer entre contraintes métiers, techniques, financières et réglementaires\n- sécuriser les investissements IT et les trajectoires de transformation",
         icon: 'M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',
         color: 'prexta-blue',
     },
     {
         title: "Cybersécurité & Résilience des Systèmes d'Information",
         description:
-            "L'augmentation des menaces cyber et la complexité des environnements IT exigent des dispositifs de sécurité robustes et opérationnels. Prexta accompagne les organisations pour :\n● Renforcer leur posture de sécurité globale\n● Protéger les infrastructures et données critiques\n● Améliorer la capacité de détection et de réponse aux incidents\n● Structurer une gouvernance cyber efficace",
+            "L'augmentation des menaces cyber et la complexité des environnements IT exigent des dispositifs de sécurité robustes et opérationnels. Prexta accompagne les organisations pour :\n- Renforcer leur posture de sécurité globale\n- Protéger les infrastructures et données critiques\n- Améliorer la capacité de détection et de réponse aux incidents\n- Structurer une gouvernance cyber efficace",
         icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z',
         color: 'prexta-cyan',
     },
     {
         title: 'Cloud, Infrastructures & Exploitation IT',
         description:
-            "Les infrastructures et environnements cloud sont au cœur des systèmes d'information modernes. Prexta accompagne ses clients pour :\n● Concevoir des environnements adaptés aux enjeux métiers\n● Sécuriser l'exploitation et la continuité de service\n● Piloter des projets techniques complexes\n● Maîtriser les coûts, délais et risques opérationnels",
+            "Les infrastructures et environnements cloud sont au cœur des systèmes d'information modernes. Prexta accompagne ses clients pour :\n- Concevoir des environnements adaptés aux enjeux métiers\n- Sécuriser l'exploitation et la continuité de service\n- Piloter des projets techniques complexes\n- Maîtriser les coûts, délais et risques opérationnels",
         icon: 'M13 10V3L4 14h7v7l9-11h-7z',
         color: 'prexta-indigo',
     },
     {
         title: 'Data, Gouvernance & Intelligence Artificielle',
         description:
-            'La donnée est un actif stratégique, mais souvent sous-exploité. Prexta accompagne ses clients pour :\n● Structurer leurs plateformes data\n● Fiabiliser et gouverner les données\n● Généraliser les usages IA au sein du SI\n● Intégrer et piloter les agents IA (Protocole A2A)\n● Sécuriser les flux et les traitements de données sensibles\n● MoM et MoF',
+            'La donnée est un actif stratégique, mais souvent sous-exploité. Prexta accompagne ses clients pour :\n- Structurer leurs plateformes data\n- Fiabiliser et gouverner les données\n- Généraliser les usages IA au sein du SI\n- Intégrer et piloter les agents IA (Protocole A2A)\n- Sécuriser les flux et les traitements de données sensibles\n- MoM et MoF',
         icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z',
         color: 'prexta-blue',
     },
@@ -212,15 +212,20 @@ onMounted(() => {
             class="relative z-10 mx-auto flex max-w-6xl flex-col items-center px-6 pt-10 pb-14 text-center lg:pt-14 lg:pb-20"
         >
             <h1
-                class="mt-4 flex flex-col items-center gap-2 text-5xl leading-[0.9] font-black tracking-[-0.05em] sm:text-7xl lg:text-[7rem]"
+                class="mt-4 flex flex-col items-center gap-2 text-5xl leading-[0.9] font-black tracking-[-0.05em] sm:text-3xl lg:text-5xl"
             >
                 <span class="reveal reveal-fade-up" style="--delay: 100ms"
-                    >Tech With A</span
+                    >Éclairer vos décisions IT</span
                 >
                 <span
                     class="text-gradient reveal reveal-scale-up"
                     style="--delay: 300ms"
-                    >Human Heartbeat</span
+                    >Structurer vos trajectoires</span
+                >
+                <span
+                    class="text-gradient reveal reveal-scale-up"
+                    style="--delay: 300ms"
+                    >Réussir vos transformations complexes</span
                 >
             </h1>
 
@@ -228,30 +233,22 @@ onMounted(() => {
                 class="reveal reveal-fade-up mt-8 max-w-2xl text-base leading-relaxed font-medium text-gray-600 md:text-xl dark:text-gray-400"
                 style="--delay: 400ms"
             >
-                Nous intervenons là où les projets critiques nécessitent une
-                vision globale, des arbitrages structurants et une gouvernance
-                solide pour sécuriser les investissements IT, maîtriser les
-                risques et garantir la réussite des transformations.
-            </p>
+                Cabinet de conseil premium en Architecture d’Entreprise et Ingénierie IT. Nous transformons vos défis SI en avantages compétitifs durables.</p>
 
             <div
                 class="reveal reveal-fade-up mt-10 flex flex-col items-center gap-4 sm:flex-row"
                 style="--delay: 600ms"
             >
-                <Link
-                    :href="jobsIndex.url()"
+                <a
+                    href="https://calendly.com/maatar93/30min"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     class="group relative overflow-hidden rounded-full bg-[#1b1b18] px-8 py-4 text-base font-black text-white shadow-xl transition-all hover:scale-105 active:scale-95 dark:bg-white dark:text-black"
                 >
-                    <span class="relative z-10">REJOINDRE L'AVENTURE</span>
+                    <span class="relative z-10">Parler à un expert maintenant: Échange stratégique gratuit</span>
                     <div
                         class="absolute inset-0 bg-prexta-gradient opacity-0 transition-opacity group-hover:opacity-100"
                     ></div>
-                </Link>
-                <a
-                    href="#sectors"
-                    class="rounded-full border-2 border-gray-100 bg-white/50 px-8 py-4 text-base font-black backdrop-blur-sm transition-all hover:bg-gray-50 active:scale-95 dark:border-gray-800 dark:bg-black/50 dark:hover:bg-gray-900"
-                >
-                    NOS EXPERTISES
                 </a>
             </div>
         </main>
@@ -271,31 +268,18 @@ onMounted(() => {
                         <h2
                             class="reveal reveal-slide-left mb-6 text-4xl leading-none font-black tracking-tighter lg:text-6xl"
                         >
-                            Qui sommes <br /><span class="text-gradient"
-                                >nous ?</span
-                            >
+                            Qui sommes-nous?
                         </h2>
                         <div
                             class="reveal reveal-slide-left space-y-4 text-base leading-relaxed text-gray-600 dark:text-gray-400"
                             style="--delay: 200ms"
                         >
                             <p>
-                                <strong>Prexta</strong> un cabinet de conseil
-                                premium spécialisé en Architecture d'Entreprise,
-                                Architectures IT, Transformation Digitale et
-                                Ingénierie (Data, Cyber, Cloud, Ops, IA),
-                                apportant expertise, séniorité et éthique.
-                            </p>
-                            <p>
-                                Nous accompagnons les organisations dans la
-                                conception, la transformation et la gouvernance
-                                des systèmes d'information stratégiques, en
-                                plaçant l'architecture, l'IA et l'ingénierie au
-                                cœur des décisions.
+                Prexta intervient là où la vision globale, la gouvernance solide et l’expertise senior font toute la différence. Architecture, Data & IA Agentique, Cybersécurité, Cloud & Ops : nous brisons les silos pour vous faire gagner en sécurité, en vitesse et en performance.
                             </p>
                         </div>
 
-                        <div class="mt-8 grid grid-cols-2 gap-6">
+                        <!-- <div class="mt-8 grid grid-cols-2 gap-6">
                             <div
                                 class="reveal reveal-fade-up"
                                 style="--delay: 300ms"
@@ -327,7 +311,7 @@ onMounted(() => {
                                     Pôles d'Excellence
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
 
                     <div
@@ -404,7 +388,7 @@ onMounted(() => {
                         href="#contact"
                         class="rounded-full bg-white px-8 py-4 text-base font-black text-black transition-all hover:scale-105 hover:shadow-2xl"
                     >
-                        START THE AUDIT
+                        Lancer l'audit
                     </a>
                     <Link
                         :href="jobsIndex.url()"
